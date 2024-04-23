@@ -1,0 +1,337 @@
+Advanced SELECTs
+Worksheet 3
+
+Nama	: Genta Swarawisesa Erliarto Putra
+
+SOAL 3.1
+
+1.	Tampilkan produk yang asset nya diatas 20jt
+MariaDB [dbtoko1]> SELECT SUM(harga_beli * stok) as total from produk; //menghitung total asset
+MariaDB [dbtoko1]> SELECT * FROM produk WHERE harga_beli * stok > 20000000; ini yang betul
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT * FROM produk WHERE harga_beli * stok > 20000000;
++----+-------+------------------+------------+------------+------+----------+------------------------+-----------+-----------------+
+| id | kode  | nama             | harga_beli | harga_jual | stok | min_stok | foto                   | deskripsi | jenis_produk_id |
++----+-------+------------------+------------+------------+------+----------+------------------------+-----------+-----------------+
+|  2 | TV02  | Televisi 40 inch |    5500000 |    7440000 |    4 |        2 | NULL                   | NULL      |               1 |
+|  3 | K001  | Kulkas 2 pintu   |    3500000 |    4680000 |    6 |        2 |                        | NULL      |               1 |
+|  6 | PC01  | PC Desktop HP    |    7000000 |    9984000 |    9 |        2 | NULL                   | NULL      |               5 |
+|  8 | AC01  | Notebook Acer S  |    8000000 |   11232000 |    7 |        2 | NULL                   | NULL      |               5 |
+|  9 | LN01  | Notebook Lenovo  |    9000000 |   12480000 |    9 |        2 | NULL                   | NULL      |               5 |
+| 11 | L005  | Laptop Lenovo    |   13000000 |   16000000 |    5 |        2 |                        | NULL      |               1 |
+| 18 | L0015 | Laptop Asus      |    3000000 |    5000000 |   10 |       20 | foto-65542ffa66604.jpg | NULL      |               1 |
++----+-------+------------------+------------+------------+------+----------+------------------------+-----------+-----------------+
+
+2.	Tampilkan data produk beserta selisih stok dengan minimal stok
+MariaDB [dbtoko1]> SELECT SUM(stok - min_stok) as selisih from produk;
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT SUM(stok - min_stok) as selisih from produk;
++---------+
+| selisih |
++---------+
+|      91 |
++---------+
+
+3.	Tampilkan total asset produk secara keseluruhan
+MariaDB [dbtoko1]> SELECT sum(stok) as total_asset from produk;
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT sum(stok) as total_asset from produk;
++-------------+
+| total_asset |
++-------------+
+|         193 |
++-------------+
+
+4.	Tampilkan data pelanggan yang lahirnya antara tahun 1980 sampai 1990
+MariaDB [dbtoko1]> SELECT * FROM pelanggan WHERE YEAR(tgl_lahir) BETWEEN 1999 AND 2004;
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT * FROM pelanggan WHERE YEAR(tgl_lahir) BETWEEN 1999 AND 2004;
+Empty set
+
+5.	Tampilkan data pelanggan yang lahirnya tahun 1998
+MariaDB [dbtoko1]> SELECT * FROM pelanggan WHERE YEAR(tgl_lahir)=1998;
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT * FROM pelanggan WHERE YEAR(tgl_lahir)=1998;
+Empty set
+
+6.	Tampilkan data pelanggan yang berulang tahun bulan agustus
+MariaDB [dbtoko1]> SELECT * FROM pelanggan WHERE MONTH(tgl_lahir)=08;
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT * FROM pelanggan WHERE MONTH(tgl_lahir)=08;
+Empty set
+
+7.	Tampilkan data pelanggan : nama, tmp_lahir, tgl_lahir dan umur (selisih tahun sekarang dikurang tahun kelahiran)
+MariaDB [dbtoko1]> SELECT nama, tmp_lahir, tgl_lahir, (YEAR(NOW())-YEAR(tgl_lahir)) AS umur FROM pelanggan;
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT nama, tmp_lahir, tgl_lahir, (YEAR(NOW())-YEAR(tgl_lahir)) AS umur FROM pelanggan;
++--------------------+------------+------------+------+
+| nama               | tmp_lahir  | tgl_lahir  | umur |
++--------------------+------------+------------+------+
+| Agung Sedayu Group | Solo       | 2010-01-01 |   14 |
+| Pandan Wangi       | Yogyakarta | 1950-01-01 |   74 |
+| Sekar Mirah        | Kediri     | 1983-02-20 |   41 |
+| Swandaru Geni      | Kediri     | 1981-01-04 |   43 |
+| Pradabashu         | Pati       | 1985-04-02 |   39 |
+| Gayatri Dwi        | Jakarta    | 1987-11-28 |   37 |
+| Dewi Gyat          | Jakarta    | 1988-12-01 |   36 |
+| Andre Haru         | Surabaya   | 1990-07-15 |   34 |
+| Ahmad Hasan        | Surabaya   | 1992-10-15 |   32 |
+| Cassanndra         | Belfast    | 1990-11-20 |   34 |
+| Andi Wijaya        | Tangerang  | 2023-11-07 |    1 |
+| Ira                | Jakarta    | 2023-11-07 |    1 |
++--------------------+------------+------------+------+
+
+SOAL 3.2
+
+1.	Berapa jumlah pelanggan yang tahun lahirnya 1998
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT COUNT(*) AS jumlah_pelanggan FROM pelanggan WHERE YEAR(tgl_lahir)=1998;
++------------------+
+| jumlah_pelanggan |
++------------------+
+|                0 |
++------------------+
+
+2.	Berapa jumlah pelanggan perempuan yang tempat lahirnya di Jakarta
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT COUNT(*) AS pelanggan_perempuan FROM pelanggan WHERE jk = 'P' AND tmp_lahir = 'jakarta';
++---------------------+
+| pelanggan_perempuan |
++---------------------+
+|                   3 |
++---------------------+
+
+3.	Berapa jumlah total stok semua produk yang harga jualnya dibawah 10rb
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT SUM(stok) AS total_stok FROM produk WHERE harga_jual <10000;
++------------+
+| total_stok |
++------------+
+|         79 |
++------------+
+
+4.	Ada berapa produk yang mempunyai kode awal K
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT COUNT(*) AS produk_kode_k FROM produk WHERE kode LIKE 'K%';
++---------------+
+| produk_kode_k |
++---------------+
+|             1 |
++---------------+
+
+5.	Berapa harga jual rata-rata produk yang diatas 1jt
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT AVG(harga_jual) AS harga_rata2 FROM produk WHERE harga_jual >1000000;
++--------------------+
+| harga_rata2        |
++--------------------+
+| 31387733.333333332 |
++--------------------+
+
+6.	Tampilkan jumlah stok yang paling besar
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT MAX(stok) AS jumlah_stok_terbesar FROM produk;
++----------------------+
+| jumlah_stok_terbesar |
++----------------------+
+|                   53 |
++----------------------+
+
+7.	Ada berapa produk yang stoknya kurang dari minimal stok
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT COUNT(*) AS produk_kurang_stok FROM produk WHERE stok < min_stok;
++--------------------+
+| produk_kurang_stok |
++--------------------+
+|                  4 |
++--------------------+
+
+8.	Berapa total asset dari keseluruhan produk
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT SUM(stok) as total_asset from produk;
++-------------+
+| total_asset |
++-------------+
+|         193 |
++-------------+
+
+SOAL 3.3
+
+1.	Tampilkan data produk : id, nama, stok dan informasi jika stok telah sampai batas minimal atau kurang dari minimum stok dengan informasi ‘segera belanja’ jika tidak ‘stok aman’.
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT id, nama, stok, min_stok, CASE WHEN stok >= min_stok THEN 'STOK aman' ELSE 'Silahkan Belanja' END AS keterangan FROM produk;
++----+-------------------+------+----------+------------------+
+| id | nama              | stok | min_stok | keterangan       |
++----+-------------------+------+----------+------------------+
+|  1 | Televisi 21 inchs |    5 |        2 | STOK aman        |
+|  2 | Televisi 40 inch  |    4 |        2 | STOK aman        |
+|  3 | Kulkas 2 pintu    |    6 |        2 | STOK aman        |
+|  4 | Meja Makan        |    4 |        3 | STOK aman        |
+|  5 | Teh Kotak         |    6 |       10 | Silahkan Belanja |
+|  6 | PC Desktop HP     |    9 |        2 | STOK aman        |
+|  7 | Teh Botol         |   53 |       10 | STOK aman        |
+|  8 | Notebook Acer S   |    7 |        2 | STOK aman        |
+|  9 | Notebook Lenovo   |    9 |        2 | STOK aman        |
+| 11 | Laptop Lenovo     |    5 |        2 | STOK aman        |
+| 15 | Kopi              |   10 |       15 | Silahkan Belanja |
+| 16 | Teh Sosro 2       |   10 |       12 | Silahkan Belanja |
+| 18 | Laptop Asus       |   10 |       20 | Silahkan Belanja |
+| 19 | Televisi 22 inc`  |    5 |        2 | STOK aman        |
+| 20 | Televisi 23 inc   |    5 |        2 | STOK aman        |
+| 21 | Televisi 24 inc   |    5 |        2 | STOK aman        |
+| 22 | Televisi 25 inc   |    5 |        2 | STOK aman        |
+| 24 | Televisi 27 inc   |    5 |        2 | STOK aman        |
+| 25 | Televisi 28 inc   |    5 |        2 | STOK aman        |
+| 26 | Televisi 29 inc   |    5 |        2 | STOK aman        |
+| 27 | Teh Pucuk         |   10 |        2 | STOK aman        |
+| 28 | Teh Pucuk2        |   10 |        2 | STOK aman        |
++----+-------------------+------+----------+------------------+
+
+2.	Tampilkan data pelanggan: id, nama, umur dan kategori umur : jika umur < 17 → ‘muda’ , 17-55 → ‘Dewasa’, selainnya ‘Tua’
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT id, nama, (YEAR(NOW()) - YEAR(tgl_lahir)) AS umur,
+    -> CASE
+    -> WHEN (YEAR(NOW()) - YEAR(tgl_lahir)) < 17 THEN 'muda'
+    -> WHEN (YEAR(NOW()) - YEAR(tgl_lahir)) BETWEEN 17 AND 55 THEN 'dewasa'
+    -> ELSE 'tua'
+    -> END AS kategori_umur FROM pelanggan;
++----+--------------------+------+---------------+
+| id | nama               | umur | kategori_umur |
++----+--------------------+------+---------------+
+|  1 | Agung Sedayu Group |   14 | muda          |
+|  2 | Pandan Wangi       |   74 | tua           |
+|  3 | Sekar Mirah        |   41 | dewasa        |
+|  4 | Swandaru Geni      |   43 | dewasa        |
+|  5 | Pradabashu         |   39 | dewasa        |
+|  6 | Gayatri Dwi        |   37 | dewasa        |
+|  7 | Dewi Gyat          |   36 | dewasa        |
+|  8 | Andre Haru         |   34 | dewasa        |
+|  9 | Ahmad Hasan        |   32 | dewasa        |
+| 10 | Cassanndra         |   34 | dewasa        |
+| 11 | Andi Wijaya        |    1 | muda          |
+| 12 | Ira                |    1 | muda          |
++----+--------------------+------+---------------+
+
+3.	Tampilkan data produk: id, kode, nama, dan bonus untuk kode ‘TV01’ →’DVD Player’ , ‘K001’ → ‘Rice Cooker’ selain dari diatas ‘Tidak Ada’
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT id, kode, nama,
+    -> CASE
+    -> WHEN kode = 'TV01' THEN 'DVD Player'
+    -> WHEN kode = 'K001' THEN 'Rice Cooker'
+    -> ELSE 'Tidak Ada'
+    -> END AS bonus FROM produk;
++----+--------+-------------------+-------------+
+| id | kode   | nama              | bonus       |
++----+--------+-------------------+-------------+
+|  1 | TV01   | Televisi 21 inchs | DVD Player  |
+|  2 | TV02   | Televisi 40 inch  | Tidak Ada   |
+|  3 | K001   | Kulkas 2 pintu    | Rice Cooker |
+|  4 | M001   | Meja Makan        | Tidak Ada   |
+|  5 | TK01   | Teh Kotak         | Tidak Ada   |
+|  6 | PC01   | PC Desktop HP     | Tidak Ada   |
+|  7 | TB01   | Teh Botol         | Tidak Ada   |
+|  8 | AC01   | Notebook Acer S   | Tidak Ada   |
+|  9 | LN01   | Notebook Lenovo   | Tidak Ada   |
+| 11 | L005   | Laptop Lenovo     | Tidak Ada   |
+| 15 | L112   | Kopi              | Tidak Ada   |
+| 16 | L113   | Teh Sosro 2       | Tidak Ada   |
+| 18 | L0015  | Laptop Asus       | Tidak Ada   |
+| 19 | TV0115 | Televisi 22 inc`  | Tidak Ada   |
+| 20 | TV0116 | Televisi 23 inc   | Tidak Ada   |
+| 21 | TV0117 | Televisi 24 inc   | Tidak Ada   |
+| 22 | TV0118 | Televisi 25 inc   | Tidak Ada   |
+| 24 | TV0120 | Televisi 27 inc   | Tidak Ada   |
+| 25 | TV0121 | Televisi 28 inc   | Tidak Ada   |
+| 26 | TV0122 | Televisi 29 inc   | Tidak Ada   |
+| 27 | THP001 | Teh Pucuk         | Tidak Ada   |
+| 28 | THP002 | Teh Pucuk2        | Tidak Ada   |
++----+--------+-------------------+-------------+
+
+SOAL 3.4
+
+1.	Tampilkan data statistik jumlah tempat lahir pelanggan
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT tmp_lahir, COUNT(*) AS jumlah_pelanggan FROM pelanggan GROUP BY tmp_lahir;
++------------+------------------+
+| tmp_lahir  | jumlah_pelanggan |
++------------+------------------+
+| Belfast    |                1 |
+| Jakarta    |                3 |
+| Kediri     |                2 |
+| Pati       |                1 |
+| Solo       |                1 |
+| Surabaya   |                2 |
+| Tangerang  |                1 |
+| Yogyakarta |                1 |
++------------+------------------+
+
+2.	Tampilkan jumlah statistik produk berdasarkan jenis produk
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT CASE WHEN jenis_produk_id = 1 THEN 'Elektronik' WHEN jenis_produk_id = 2 THEN 'Furniture' WHEN jenis_produk_id = 3 THEN 'Makanan' ELSE 'Minuman' END AS jenis_produk, SUM(stok) AS jumlah FROM produk GROUP BY jenis_produk_id;
++------------+--------+
+| jenis_produk   | jumlah |
++------------+--------+
+| Elektronik |     75 |
+| Furniture  |      4 |
+| Minuman    |     89 |
+| Minuman    |     25 |
++------------+--------+
+
+3.	Tampilkan data pelanggan yang usianya dibawah rata usia pelanggan
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT id, nama, (YEAR(NOW()) - YEAR(tgl_lahir)) AS umur FROM pelanggan WHERE (YEAR(NOW()) - YEAR(tgl_lahir)) < (SELECT AVG(YEAR(NOW()) - YEAR(tgl_lahir)) FROM pelanggan);
++----+--------------------+------+
+| id | nama               | umur |
++----+--------------------+------+
+|  1 | Agung Sedayu Group |   14 |
+|  9 | Ahmad Hasan        |   32 |
+| 11 | Andi Wijaya        |    1 |
+| 12 | Ira                |    1 |
++----+--------------------+------+
+
+4.	Tampilkan data produk yang harganya diatas rata-rata harga produk
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT * FROM produk WHERE harga_jual > (SELECT AVG(harga_jual) FROM produk);
++----+--------+-------------------+------------+------------+------+----------+------+-----------+-----------------+
+| id | kode   | nama              | harga_beli | harga_jual | stok | min_stok | foto | deskripsi | jenis_produk_id |
++----+--------+-------------------+------------+------------+------+----------+------+-----------+-----------------+
+|  1 | TV01   | Televisi 21 inchs |    3500000 |   50500000 |    5 |        2 |      | NULL      |               1 |
+| 19 | TV0115 | Televisi 22 inc`  |    3500000 |   50500000 |    5 |        2 | NULL | NULL      |               1 |
+| 20 | TV0116 | Televisi 23 inc   |    3500000 |   50500000 |    5 |        2 | NULL | NULL      |               1 |
+| 21 | TV0117 | Televisi 24 inc   |    3500000 |   50500000 |    5 |        2 | NULL | NULL      |               1 |
+| 22 | TV0118 | Televisi 25 inc   |    3500000 |   50500000 |    5 |        2 | NULL | NULL      |               1 |
+| 24 | TV0120 | Televisi 27 inc   |    3500000 |   50500000 |    5 |        2 | NULL | NULL      |               1 |
+| 25 | TV0121 | Televisi 28 inc   |    3500000 |   50500000 |    5 |        2 | NULL | NULL      |               1 |
+| 26 | TV0122 | Televisi 29 inc   |    3500000 |   50500000 |    5 |        2 | NULL | NULL      |               1 |
++----+--------+-------------------+------------+------------+------+----------+------+-----------+-----------------+
+
+5.	Tampilkan data pelanggan yang memiliki kartu dimana iuran tahunan kartu diatas 90rb
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT * FROM pelanggan WHERE kartu_id IN(SELECT id FROM kartu WHERE iuran > 90000);
++----+-------+--------------------+----+------------+------------+-------------------+----------+
+| id | kode  | nama               | jk | tmp_lahir  | tgl_lahir  | email             | kartu_id |
++----+-------+--------------------+----+------------+------------+-------------------+----------+
+|  1 | C001  | Agung Sedayu Group | L  | Solo       | 2010-01-01 | sedayu@gmail.com  |        1 |
+|  2 | C002  | Pandan Wangi       | P  | Yogyakarta | 1950-01-01 | wangi@gmail.com   |        2 |
+|  3 | C003  | Sekar Mirah        | P  | Kediri     | 1983-02-20 | mirah@yahoo.com   |        1 |
+|  5 | C005  | Pradabashu         | L  | Pati       | 1985-04-02 | prada85@gmail.com |        2 |
+|  6 | C006  | Gayatri Dwi        | P  | Jakarta    | 1987-11-28 | gaya87@gmail.com  |        1 |
+|  7 | C007  | Dewi Gyat          | P  | Jakarta    | 1988-12-01 | giyat@gmail.com   |        1 |
+| 10 | C010  | Cassanndra         | P  | Belfast    | 1990-11-20 | casa90@gmail.com  |        1 |
+| 11 | K0010 | Andi Wijaya        | L  | Tangerang  | 2023-11-07 | andi@gmail.com    |        2 |
++----+-------+--------------------+----+------------+------------+-------------------+----------+
+
+6.	Tampilkan statistik data produk dimana harga produknya dibawah rata-rata harga produk secara keseluruhan
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT COUNT(*) AS jumlah_produk, MIN(harga_jual) AS harga_terendah, MAX(harga_jual) AS harga_tert
+inggi, AVG(harga_jual) AS harga_rata2 FROM produk WHERE harga_jual < (SELECT AVG(harga_jual) FROM produk);
++---------------+----------------+-----------------+-------------------+
+| jumlah_produk | harga_terendah | harga_tertinggi | harga_rata2       |
++---------------+----------------+-----------------+-------------------+
+|            14 |           2500 |        16000000 | 4819785.714285715 |
++---------------+----------------+-----------------+-------------------+
+
+7.	Tampilkan data pelanggan yang memiliki kartu dimana diskon kartu yang diberikan diatas 3%
+Jawaban:
+MariaDB [dbpos_sib6]> SELECT * FROM pelanggan WHERE kartu_id IN (SELECT kartu_id FROM kartu WHERE diskon > 3);
+Empty set
